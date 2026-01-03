@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Contact || SOVS Intelligence</title>
+    <link rel="icon" type="image/png" href="/images/loader.png" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/animate.min.css" />
+    <link rel="stylesheet" href="/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="/css/style.css" />
+    <style>
+        body { font-family: 'Outfit', sans-serif; background: #050b18; color: #fff; }
+        .inner-banner { background: linear-gradient(rgba(5, 11, 24, 0.8), rgba(5, 11, 24, 0.8)), url('/images/backgrounds/inner-banner-bg.jpg'); padding: 100px 0; text-align: center; }
+        .footer-widget__title { color: #3b82f6; font-weight: 800; margin-bottom: 30px; }
+        .footer-widget__text { color: rgba(255,255,255,0.6); }
+    </style>
+</head>
+<body>
+    <div class="preloader">
+        <img src="/images/loader.png" class="preloader__image" alt="" />
+    </div>
+
+    <div class="page-wrapper">
+        <header class="site-header site-header__header-one">
+            <nav class="navbar navbar-expand-lg navbar-light header-navigation stricky">
+                <div class="container clearfix">
+                    <div class="logo-box clearfix">
+                        <a class="navbar-brand" th:href="@{/index}">
+                            <img src="/images/loader.png" width="60" alt="Logo" />
+                        </a>
+                        <button class="menu-toggler" data-target=".main-navigation">
+                            <span class="fa fa-bars"></span>
+                        </button>
+                    </div>
+                    <div class="main-navigation">
+                        <ul class="navigation-box">
+                            <li><a th:href="@{/index}">Home</a></li>
+                            <li><a th:href="@{/news}">Intelligence</a></li>
+                            <li class="current"><a th:href="@{/contact}">Contact</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+        </header>
+
+        <section class="inner-banner">
+            <div class="container">
+                <h2 class="inner-banner__title">Secure Contact Center</h2>
+                <ul class="list-unstyled thm-breadcrumb" style="display: flex; justify-content: center; gap: 10px;">
+                    <li><a th:href="@{/index}">Home</a></li>
+                    <li>/</li>
+                    <li>Contact</li>
+                </ul>
+            </div>
+        </section>
+
+        <section class="contact-info-one" style="padding: 80px 0;">
+            <div class="container">
+                <div class="row">
+                    <div class="col-xl-4">
+                        <div class="contact-info-one__single" style="background: rgba(255,255,255,0.05); padding: 40px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.1);">
+                            <i class="fa fa-map-marker-alt" style="color: #3b82f6; font-size: 30px; margin-bottom: 20px;"></i>
+                            <h4>Command Center</h4>
+                            <p>Global Sovereignty Node 01, IND</p>
+                        </div>
+                    </div>
+                    <div class="col-xl-4">
+                        <div class="contact-info-one__single" style="background: rgba(255,255,255,0.05); padding: 40px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.1);">
+                            <i class="fa fa-phone-alt" style="color: #10b981; font-size: 30px; margin-bottom: 20px;"></i>
+                            <h4>Secure Line</h4>
+                            <p><a href="tel:+916290551213" style="color: inherit;">+91 62905-51213</a></p>
+                        </div>
+                    </div>
+                    <div class="col-xl-4">
+                        <div class="contact-info-one__single" style="background: rgba(255,255,255,0.05); padding: 40px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.1);">
+                            <i class="fa fa-envelope" style="color: #3b82f6; font-size: 30px; margin-bottom: 20px;"></i>
+                            <h4>Encrypted Mail</h4>
+                            <p><a href="mailto:donotreplysovs@gmail.com" style="color: inherit;">support@sovs.secure</a></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="contact-form-one" style="padding-bottom: 100px;">
+            <div class="container">
+                <div class="block-title text-center">
+                    <h2 class="block-title__title">Dispatch Transmission</h2>
+                    <p>Encrypted messages are routed through our global secure network.</p>
+                </div>
+                <form method="post" th:action="@{/sendemail}" class="contact-form-one__form" style="max-width: 800px; margin: 40px auto;">
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <input type="text" name="fullname" placeholder="Agent Name" style="width: 100%; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); padding: 15px; border-radius: 10px; color: #fff; margin-bottom: 20px;" />
+                        </div>
+                        <div class="col-lg-6">
+                            <input type="email" name="email" placeholder="Secure Email" style="width: 100%; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); padding: 15px; border-radius: 10px; color: #fff; margin-bottom: 20px;" />
+                        </div>
+                        <div class="col-lg-12">
+                            <textarea name="message" placeholder="Transmission Content" style="width: 100%; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); padding: 15px; border-radius: 10px; color: #fff; height: 150px; margin-bottom: 20px;"></textarea>
+                            <div class="text-center">
+                                <button type="submit" class="thm-btn" style="background: #3b82f6; border: none; padding: 15px 40px; border-radius: 10px; color: #fff; font-weight: 800; cursor: pointer;">Initialize Dispatch</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </section>
+
+        <footer class="site-footer">
+            <div class="site-footer__upper" style="padding: 60px 0; border-top: 1px solid rgba(255,255,255,0.1);">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-xl-4 col-lg-6">
+                            <div class="footer-widget">
+                                <h3 class="footer-widget__title">About SOVS</h3>
+                                <p class="footer-widget__text">Providing cryptographically secure voting infrastructure for the next generation of global democracy.</p>
+                            </div>
+                        </div>
+                        <div class="col-xl-4 col-lg-6">
+                            <div class="footer-widget">
+                                <h3 class="footer-widget__title">Network Updates</h3>
+                                <ul class="list-unstyled">
+                                    <li><a th:href="@{/news}" style="color: rgba(255,255,255,0.6);">Blockchain Pulse Active</a></li>
+                                    <li><a th:href="@{/news}" style="color: rgba(255,255,255,0.6);">Neural Node Synchronized</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="col-xl-4 col-lg-6">
+                            <div class="footer-widget">
+                                <h3 class="footer-widget__title">Global Reach</h3>
+                                <p class="footer-widget__text">Operating across 140+ secure digital nodes worldwide.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="site-footer__bottom" style="padding: 30px 0; text-align: center; background: rgba(0,0,0,0.2);">
+                <p>&copy; 2026 SOVS || Secure Online Voting System</p>
+            </div>
+        </footer>
+    </div>
+
+    <script src="/js/jquery.min.js"></script>
+    <script src="/js/bootstrap.bundle.min.js"></script>
+    <script src="/js/theme.js"></script>
+</body>
+</html>

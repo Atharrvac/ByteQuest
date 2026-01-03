@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="UTF-8">
+	<title>Blockchain Voting Interface || SOVS</title>
+	<meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+	<link rel="stylesheet" type="text/css" href="/css/vote.css">
+</head>
+<body>
+
+    <div class="dashboard-container">
+        <!-- Dashboard Stats Sidebar -->
+        <aside class="stats-panel">
+            <div class="glass-card">
+                <div class="stat-item">
+                    <div class="stat-label">Network Status</div>
+                    <div class="status-indicator">
+                        <div class="pulse-dot"></div>
+                        <span>BLOCKCHAIN_LIVE</span>
+                    </div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-label">Total Participation</div>
+                    <div class="stat-value" id="participationVal">84%</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-label">Active Nodes</div>
+                    <div class="stat-value" style="color: #3b82f6;">1,204</div>
+                </div>
+            </div>
+
+            <div class="glass-card" style="flex: 1;">
+                <div class="stat-label" style="margin-bottom: 15px;">Live Ledger Feed</div>
+                <div class="ledger-feed" id="ledger">
+                    <!-- Dynamic Ledger Entries -->
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Voting Area -->
+        <main class="voting-grid-container">
+            <header class="page-header">
+                <h1 class="page-title">Digital Ballot</h1>
+                <p style="color: rgba(255,255,255,0.4); margin-top: 10px;">Select your representative to cast an immutable vote on the blockchain.</p>
+            </header>
+
+            <div class="candidate-grid">
+                <div class="glass-card profile-card" th:each="candidate : ${candidates}">
+                    <div class="profile-card_cover">
+                        <img th:src="${candidate.partypic}" alt="Party Backdrop">
+                    </div>
+                    <div class="profile-card_padding">
+                        <div class="profile-card_image">
+                            <img th:src="${candidate.candidateImagePath}" th:alt="${candidate.firstname}">
+                        </div>
+                        <div class="profile-card_details">
+                            <h3><span th:text="${candidate.firstname}"></span> <span th:text="${candidate.lastname}"></span></h3>
+                            <div class="party-tag" th:text="${candidate.party}"></div>
+                        </div>
+                        <a th:href="@{'/vote/votecasted/'+${candidate.party}}" th:id="'vote-' + ${candidate.party}">
+                            <button class="vote-btn">CAST IMMUTABLE VOTE</button>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Accessibility Tools -->
+    <div class="accessibility-toolbar">
+        <button class="acc-btn" id="startVoice" title="Voice Control"><i class="fa fa-microphone"></i></button>
+        <button class="acc-btn" id="toggleContrast" title="High Contrast"><i class="fa fa-adjust"></i></button>
+        <button class="acc-btn" id="toggleFont" title="Large Text"><i class="fa fa-text-height"></i></button>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        // Simulated Ledger Feed
+        const ledger = document.getElementById('ledger');
+        function addHash() {
+            const hash = '0x' + Math.random().toString(16).substring(2, 12) + '...' + Math.random().toString(16).substring(2, 6);
+            const entry = document.createElement('div');
+            entry.className = 'hash-entry';
+            entry.innerHTML = `VOTE_VERIFIED: <span style="color: #fff">${hash}</span>`;
+            ledger.prepend(entry);
+            if(ledger.children.length > 8) ledger.removeChild(ledger.lastChild);
+        }
+        setInterval(addHash, 3000);
+        for(let i=0; i<5; i++) addHash();
+
+        // Accessibility Logic
+        $('#toggleContrast').click(() => $('body').toggleClass('high-contrast'));
+        
+        let largeFont = false;
+        $('#toggleFont').click(() => {
+            largeFont = !largeFont;
+            document.documentElement.style.fontSize = largeFont ? '18px' : '16px';
+        });
+
+        // Speech Recognition
+        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+        if (SpeechRecognition) {
+            const recognition = new SpeechRecognition();
+            $('#startVoice').click(function() {
+                $(this).css('background', '#ef4444');
+                recognition.start();
+                speak("Voice system active. State the party name.");
+            });
+            recognition.onresult = (e) => {
+                const cmd = e.results[0][0].transcript.toLowerCase();
+                $('#startVoice').css('background', '');
+                $('a[id^="vote-"]').each(function() {
+                    const party = $(this).attr('id').replace('vote-', '').toLowerCase();
+                    if (cmd.includes(party)) {
+                        speak("Confirming vote for " + party);
+                        window.location.href = $(this).attr('href');
+                    }
+                });
+            };
+        }
+
+        function speak(text) {
+            const msg = new SpeechSynthesisUtterance();
+            msg.text = text;
+            window.speechSynthesis.speak(msg);
+        }
+    </script>
+</body>
+</html>

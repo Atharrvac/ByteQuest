@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Election Results || SOVS</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap');
+        
+        body {
+            background: #050b18;
+            color: #fff;
+            font-family: 'Outfit', sans-serif;
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            background-image: radial-gradient(circle at center, #1e3a8a 0%, #050b18 70%);
+        }
+
+        .victory-container {
+            text-align: center;
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 60px;
+            border-radius: 40px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            max-width: 800px;
+            width: 90%;
+            animation: fadeInBody 1s ease-out;
+        }
+
+        @keyframes fadeInBody {
+            from { opacity: 0; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        .congrats-text {
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 5px;
+            color: #3b82f6;
+            margin-bottom: 10px;
+            font-weight: 800;
+        }
+
+        .winner-title {
+            font-size: 56px;
+            font-weight: 800;
+            margin: 0 0 40px;
+            background: linear-gradient(to bottom, #fff, #94a3b8);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .winner-display {
+            position: relative;
+            display: inline-block;
+            margin-bottom: 40px;
+        }
+
+        .winner-image {
+            width: 220px;
+            height: 220px;
+            border-radius: 50%;
+            border: 8px solid #3b82f6;
+            box-shadow: 0 0 50px rgba(59, 130, 246, 0.5);
+            object-fit: cover;
+            position: relative;
+            z-index: 2;
+        }
+
+        .party-flag-badge {
+            position: absolute;
+            bottom: -10px;
+            right: -10px;
+            width: 80px;
+            height: 80px;
+            border-radius: 20px;
+            border: 4px solid #050b18;
+            background: #fff;
+            padding: 5px;
+            z-index: 3;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+        }
+
+        .winner-name {
+            font-size: 32px;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .winner-party {
+            font-size: 18px;
+            color: rgba(255,255,255,0.6);
+            margin-bottom: 30px;
+        }
+
+        .btn-home {
+            background: #3b82f6;
+            color: white;
+            text-decoration: none;
+            padding: 15px 40px;
+            border-radius: 20px;
+            font-weight: 600;
+            transition: all 0.3s;
+            display: inline-block;
+        }
+
+        .btn-home:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(59, 130, 246, 0.4);
+        }
+    </style>
+    <script src="/js/confetti.js"></script>
+</head>
+<body>
+    <div class="victory-container">
+        <div class="congrats-text">OFFICIAL ELECTION RESULT</div>
+        <h1 class="winner-title">VICTORY CONFIRMED</h1>
+
+        <div class="winner-display">
+            <img class="winner-image" th:src="${winningParty.candidateImagePath}" alt="Winner">
+            <img class="party-flag-badge" th:src="${winningParty.partypic}" alt="Party Flag">
+        </div>
+
+        <div class="winner-name">
+            <span th:text="${winningParty.firstname}"></span>
+            <span th:text="${winningParty.lastname}"></span>
+        </div>
+        <div class="winner-party">
+            Elected Representative of the <span th:text="${winningParty.party}"></span> Party
+        </div>
+
+        <p style="color: rgba(255,255,255,0.4); margin-bottom: 40px;">This election result has been cryptographically signed and recorded on the immutable blockchain ledger.</p>
+
+        <a href="/public/home" class="btn-home">RETURN TO DASHBOARD</a>
+    </div>
+
+    <script>
+        window.onload = function() {
+            if(window.confetti) {
+                confetti.start();
+                setTimeout(() => confetti.stop(), 5000);
+            }
+        };
+    </script>
+</body>
+</html>

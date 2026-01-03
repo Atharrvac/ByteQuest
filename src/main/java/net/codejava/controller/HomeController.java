@@ -141,7 +141,7 @@ public class HomeController {
 		String username = principle.getName();
 		String param2 = username;
 		// call main.py to execute python program of face recognition \\
-		ProcessBuilder pb = new ProcessBuilder("python",
+		ProcessBuilder pb = new ProcessBuilder("python3",
 				"src/main/java/net/codejava/controller/main.py",
 				"" + param2).inheritIO();
 		Process p = pb.start();
@@ -149,24 +149,27 @@ public class HomeController {
 		// call out.txt file from template to get 0/1. 0 means unsuccessful verification
 		// 1 means successful
 		File file = new File("src/main/resources/templates/out.txt");
-		BufferedReader reader = new BufferedReader(new FileReader(file));
-		String st;
-		char c = '\0';
-		// Condition holds true till
-		// there is character in a string
-		while ((st = reader.readLine()) != null) {
-			System.out.println(st.length());
-			// take the value 0/1 at 13th character from out.txt file
-			c = st.charAt(13);
+		char c = '0';
+		if (file.exists()) {
+			try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
+				String st;
+				while ((st = reader.readLine()) != null) {
+					if (st.length() >= 14) {
+						c = st.charAt(13);
+						System.out.println("Read verification status: " + c);
+					}
+				}
+			} catch (Exception e) {
+				System.err.println("Error reading out.txt: " + e.getMessage());
+			}
 		}
-		// Print the string
-		System.out.println(c);
-		reader.close();
+
 		// Goto otp verification page
 		if (c == '1') {
 			return "redirect:/public/otpsend";
 		}
 
+		System.out.println("Verification failed or timed out.");
 		return "redirect:/public/home";
 	}
 
