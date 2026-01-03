@@ -78,24 +78,36 @@ public class ForgotPasswordController {
         System.out.println("OTP " + otp + " generated for user: " + username + 
                          " (Expires at: " + new java.util.Date(otpExpiryTime) + ")");
 
-        // write code for send otp to email...
-
-        String subject = "Forget Password";
-        String message = "OTP for renewing your password = " + otp;
-        String to = email;
-        boolean flag = this.emailservice.sendEmail(subject, message, to);
-
-        if (flag) {
+        // Prepare and send password reset email
+        String subject = "Password Reset Request - Secure Voting System";
+        String message = String.format(
+            "Dear %s,%n%n" +
+            "You have requested to reset your password. Please use the following OTP to proceed:%n%n" +
+            "OTP: %d%n%n" +
+            "This OTP is valid for 5 minutes.%n%n" +
+            "If you didn't request this, please ignore this email or contact support if you have concerns.%n%n" +
+            "Best regards,%nSecure Voting System Team",
+            user.getUsername(), otp
+        );
+        
+        try {
+            if (!this.emailservice.sendEmail(subject, message, email)) {
+                throw new Exception("Email service returned false");
+            }
+            
+            // If we get here, email was sent successfully
             session.setAttribute("otp", otp);
+            session.setAttribute("otpExpiryTime", otpExpiryTime);
             session.setAttribute("email", email);
             session.setAttribute("username", username);
 
-            // Integer check=(int) session.getAttribute("otp");
+            // Redirect to OTP verification page
             return "verifyotp.html";
 
-        } else {
+        } catch (Exception e) {
+            System.err.println("Failed to send email to " + email + ": " + e.getMessage());
             session.setAttribute("message",
-                    new net.codejava.helper.Message("Failed to send OTP. Please try again!", "danger"));
+                new net.codejava.helper.Message("Failed to send OTP. Please try again later.", "danger"));
             return "sendotp.html";
         }
 
