@@ -19,31 +19,20 @@ hassle-free user experience.
 - Authors
 ## Brief Description
 
-An online voting system is an online voting technique. 
-In this system, people who are registered in the system 
-can cast his/her vote online without going to any 
-physical polling station. There are many voting 
-procedures that are being used for voting purposes, 
-such as ballot paper, EVM machines but all these 
-procedures require more time and more manpower. 
-People also have to wait in long queues which takes 
-a lot of time in the process.
+Ensuring Equal Electoral Participation for
+Specially Abled Individuals
+Many specially abled individuals face significant barriers while participating in
+elections due to inaccessible voting infrastructure, lack of assistive technologies, and
+dependence on third parties, which can compromise privacy, independence, and
+equal participation in the democratic process.
+Objective:
+To develop an inclusive, secure, and accessible voting software that enables specially
+abled citizens to cast their votes independently and confidentially. The system aims
+to support multiple accessibility features (such as screen readers, voice commands,
+adaptive interfaces, and alternative input methods), ensure end-to-end security and
+vote integrity, and promote equal, barrier-free participation in elections for all voters.            Problem: For many specially abled individuals, the democratic right to vote is hindered by a "participation gap." Inaccessible infrastructure and a lack of native assistive technologies force a reliance on third-party assistance, directly compromising voter privacy and the sanctity of the secret ballot.
 
-To eliminate all these drawbacks, we provide an online 
-system that provides features such as accuracy, 
-convenience, and privacy. Our website will not only 
-save time but also make a hassle-free user experience. 
-Our online voting system provides a platform with 
-proper instructions where users can register themselves 
-and cast vote remotely. During the entire process, 
-multiple verification processes are carried out which 
-makes this entire system secure. This project gives 
-freedom to the voter to use his/her voting rights 
-from anywhere.
-
-The main aim of this project is to cast votes with 
-proper anti-corruption techniques and to minimize 
-errors and be hassle-free.
+Solution: Our platform provides a sovereign voting experience. By integrating multimodal interfaces—including AI-driven voice commands, screen-reader optimization, and adaptive switch-input compatibility—we ensure that every citizen, regardless of physical or cognitive ability, can exercise their franchise with total independence and cryptographic security.
 
 ## Objective of the Project
 The specific objectives of the project include:
