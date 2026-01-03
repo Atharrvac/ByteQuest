@@ -118,6 +118,15 @@
         </section>
         <div class="text-center contact-form-one" style="padding-top: 50px;">
             <h3 class="block-title__title" style="padding-bottom:30px;">Enter your Citizenship ID</h3>
+            
+            <!-- Message Display Area -->
+            <div th:if="${session.message}" class="container text-center">
+                <div th:classappend="${'alert-' + session.message.type}" class="alert" role="alert">
+                    <span th:text="${session.message.content}"></span>
+                </div>
+                <th:block th:text="${#session.removeAttribute('message')}"></th:block>
+            </div>
+
             <form method="post" th:action="@{/forgotpassword/otpsend}" action=""
                 class="contact-form-one__form    contact-form-validated">
 

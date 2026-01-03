@@ -46,6 +46,13 @@ public class ForgotPasswordController {
     public String otpsend(@RequestParam("adhaarid") String username, HttpSession session) {
         // System.out.println("Email: " + email);
         User user = userservice.getUser(username);
+
+        if (user == null) {
+            session.setAttribute("message",
+                    new net.codejava.helper.Message("User not found with this Citizenship ID !", "danger"));
+            return "sendotp.html";
+        }
+
         String email = user.getEmail();
         // generating otp
         // Integer otp = random.nextInt(999999);
@@ -70,8 +77,9 @@ public class ForgotPasswordController {
             return "verifyotp.html";
 
         } else {
-
-            return "sendotp";
+            session.setAttribute("message",
+                    new net.codejava.helper.Message("Failed to send OTP. Please try again!", "danger"));
+            return "sendotp.html";
         }
 
     }
