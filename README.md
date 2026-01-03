@@ -106,5 +106,5 @@ The specific objectives of the project include:
 (Will be Uploaded Later)
 ## Feedback
 
-If you have any feedback, please reach out to us at gunjanganguly12@gmail.com
+If you have any feedback, please reach out to us at atharvachaudhari558@gmail.com
 
