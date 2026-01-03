@@ -1,11 +1,16 @@
 package net.codejava.controller;
 
+// [Hackathon Update] Home controller - Enhanced for hackathon demo
+// Handles main application routes and user dashboard functionality
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.security.Principal;
+
 import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -13,6 +18,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import net.codejava.helper.EmailTemplate;
 import net.codejava.helper.Message;
@@ -23,8 +29,6 @@ import net.codejava.service.EmailService;
 import net.codejava.service.UserService;
 import net.codejava.service.VoteService;
 import net.codejava.smartcontract.VoteSmartContract;
-
-import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 // After Authentication, user can use this link and method
