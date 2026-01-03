@@ -42,10 +42,20 @@ public class ForgotPasswordController {
     @Autowired
     EmailService emailservice;
 
-    @PostMapping("/otpsend")
-    public String otpsend(@RequestParam("adhaarid") String username, HttpSession session) {
-        // System.out.println("Email: " + email);
-        User user = userservice.getUser(username);
+    @PostMapping("/send-otp")
+    public String sendOtp(@RequestParam("username") String username, HttpSession session) {
+        // Log the username for debugging (removed from production in real applications)
+        System.out.println("Processing OTP request for username: " + username);
+        
+        // Input validation
+        if (username == null || username.trim().isEmpty()) {
+            session.setAttribute("message", 
+                new net.codejava.helper.Message("Username cannot be empty!", "danger"));
+            return "redirect:/forgotpassword";
+        }
+        
+        // Find user by username
+        User user = this.repo.findByUsername(username.trim());
 
         if (user == null) {
             session.setAttribute("message",
