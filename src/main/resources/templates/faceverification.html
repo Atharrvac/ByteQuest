@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Immersive Face Authentication || SOVS</title>
+    <link rel="icon" type="image/png" href="/images/loader.png">
+    <link rel="stylesheet" href="/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="/css/font-awesome.min.css" />
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background: #000;
+            font-family: 'Barlow', sans-serif;
+        }
+
+        .immersive-analyzer {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 1;
+        }
+
+        #video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transform: scaleX(-1);
+            filter: brightness(0.6) contrast(1.2) sepia(0.2) hue-rotate(180deg);
+        }
+
+        .hud-layer {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 10;
+        }
+
+        /* Scanning HUD Styles */
+        .scan-grid {
+            position: absolute;
+            inset: 0;
+            background-image: 
+                linear-gradient(rgba(31, 90, 210, 0.1) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(31, 90, 210, 0.1) 1px, transparent 1px);
+            background-size: 50px 50px;
+            z-index: 2;
+        }
+
+        .corner-frame {
+            position: absolute;
+            width: 100px;
+            height: 100px;
+            border: 4px solid #1f5ad2;
+            box-shadow: 0 0 20px rgba(31, 90, 210, 0.5);
+        }
+        .top-left { top: 50px; left: 50px; border-right: 0; border-bottom: 0; }
+        .top-right { top: 50px; right: 50px; border-left: 0; border-bottom: 0; }
+        .bottom-left { bottom: 50px; left: 50px; border-right: 0; border-top: 0; }
+        .bottom-right { bottom: 50px; right: 50px; border-left: 0; border-top: 0; }
+
+        .laser-scanner {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(to right, transparent, #2ed573, transparent);
+            box-shadow: 0 0 30px #2ed573;
+            animation: fullScan 4s infinite ease-in-out;
+            z-index: 15;
+            display: none;
+        }
+
+        @keyframes fullScan {
+            0%, 100% { top: 5%; opacity: 0; }
+            5% { opacity: 1; }
+            50% { top: 95%; }
+            95% { opacity: 1; }
+        }
+
+        .target-reticle {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 350px;
+            height: 450px;
+            border: 2px solid rgba(46, 213, 115, 0.3);
+            border-radius: 175px / 225px;
+            z-index: 5;
+            transition: all 0.5s ease;
+        }
+        .target-reticle.active {
+            border-color: #2ed573;
+            box-shadow: 0 0 50px rgba(46, 213, 115, 0.2);
+            width: 380px;
+            height: 480px;
+        }
+
+        .data-stream {
+            position: absolute;
+            top: 50px;
+            right: 50px;
+            width: 250px;
+            color: #1f5ad2;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 14px;
+            text-align: right;
+            z-index: 20;
+        }
+
+        .status-terminal {
+            position: fixed;
+            bottom: 60px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(5, 10, 21, 0.8);
+            border: 1px solid #1f5ad2;
+            border-radius: 10px;
+            padding: 15px 40px;
+            color: #fff;
+            font-size: 18px;
+            letter-spacing: 2px;
+            z-index: 30;
+            text-transform: uppercase;
+            box-shadow: 0 0 20px rgba(31, 90, 210, 0.4);
+        }
+
+        .floating-controls {
+            position: fixed;
+            bottom: 120px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 40;
+            display: flex;
+            gap: 20px;
+        }
+
+        .btn-premium {
+            background: #1f5ad2;
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            border-radius: 50px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 0 0 15px rgba(31, 90, 210, 0.5);
+            transition: all 0.3s ease;
+        }
+        .btn-premium:hover {
+            transform: translateY(-5px);
+            background: #2563eb;
+            box-shadow: 0 0 25px rgba(31, 90, 210, 0.8);
+        }
+        .btn-verify {
+            background: #2ed573;
+            display: none;
+        }
+
+        .info-panel {
+            position: fixed;
+            top: 50px;
+            left: 50px;
+            width: 300px;
+            background: rgba(5, 10, 21, 0.6);
+            backdrop-filter: blur(10px);
+            border-left: 5px solid #1f5ad2;
+            padding: 20px;
+            color: rgba(255,255,255,0.7);
+            z-index: 20;
+            border-radius: 0 15px 15px 0;
+        }
+
+        .mesh-dot {
+            position: absolute;
+            width: 6px;
+            height: 6px;
+            background: #2ed573;
+            border-radius: 50%;
+            z-index: 25;
+            display: none;
+            box-shadow: 0 0 10px #2ed573;
+        }
+
+        .back-home {
+            position: fixed;
+            top: 30px;
+            right: 30px;
+            color: #fff;
+            text-decoration: none;
+            z-index: 50;
+            font-size: 14px;
+            opacity: 0.5;
+            transition: opacity 0.3s;
+        }
+        .back-home:hover { opacity: 1; color: #fff; }
+    </style>
+</head>
+<body>
+    <a th:href="@{/index}" class="back-home"><i class="fa fa-arrow-left"></i> ESCAPE TO HOME</a>
+
+    <div class="immersive-analyzer">
+        <video id="video" autoplay playsinline></video>
+    </div>
+
+    <div class="hud-layer">
+        <div class="scan-grid"></div>
+        
+        <div class="corner-frame top-left"></div>
+        <div class="corner-frame top-right"></div>
+        <div class="corner-frame bottom-left"></div>
+        <div class="corner-frame bottom-right"></div>
+
+        <div class="laser-scanner" id="laser"></div>
+        
+        <div class="target-reticle" id="reticle"></div>
+
+        <div class="info-panel">
+            <h5 style="color: #fff">BIOMETRIC FLOW</h5>
+            <p style="font-size: 12px; margin-bottom: 0">NODE ID: SOVS-SECURE-AUTH-001</p>
+            <p style="font-size: 12px">ENCRYPTION: SHIELD-X64</p>
+            <div id="log" style="font-family: monospace; font-size: 10px; color: #1f5ad2">
+                > WAITING_FOR_INPUT...
+            </div>
+        </div>
+
+        <div class="data-stream" id="stream">
+            <!-- Data will flow here -->
+        </div>
+
+        <div id="mesh-field"></div>
+    </div>
+
+    <div class="status-terminal" id="terminal">
+        AUTHORIZATION REQUIRED: INITIALIZE SENSORS
+    </div>
+
+    <div class="floating-controls">
+        <button id="btnStart" class="btn-premium" style="background: #1f5ad2; border: 2px solid #2ed573;">
+            <i class="fa fa-bullseye mr-2"></i> START BIO-AUTHENTICATION
+        </button>
+    </div>
+
+    <script src="/js/jquery.min.js"></script>
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <script>
+        const video = document.getElementById('video');
+        const btnStart = document.getElementById('btnStart');
+        const laser = document.getElementById('laser');
+        const terminal = document.getElementById('terminal');
+        const reticle = document.getElementById('reticle');
+        const log = document.getElementById('log');
+        const stream = document.getElementById('stream');
+        const meshField = document.getElementById('mesh-field');
+
+        // Data Stream Effect
+        setInterval(() => {
+            const hex = Math.random().toString(16).toUpperCase().substring(2, 12);
+            const entry = document.createElement('div');
+            entry.innerText = `PACKET_${hex}...OK`;
+            stream.prepend(entry);
+            if (stream.children.length > 15) stream.removeChild(stream.lastChild);
+        }, 300);
+
+        function updateLog(msg) {
+            log.innerHTML += `<br>> ${msg}`;
+            if (log.innerHTML.split('<br>').length > 5) {
+                log.innerHTML = log.innerHTML.split('<br>').slice(1).join('<br>');
+            }
+        }
+
+        async function startFullAuthentication() {
+            try {
+                // Step 1: Initialize Sensors
+                const mediaStream = await navigator.mediaDevices.getUserMedia({ video: true });
+                video.srcObject = mediaStream;
+                terminal.innerText = "SENSORS_ONLINE: ANALYSIS_START";
+                reticle.classList.add('active');
+                btnStart.disabled = true;
+                btnStart.innerHTML = "<i class='fa fa-spinner fa-spin'></i> AUTHENTICATING...";
+                
+                updateLog("CAMERA_STREAM_ESTABLISHED");
+                updateLog("HUD_CALIBRATED");
+                updateLog("STARTING_NEURAL_LAYER_SCAN");
+                
+                if (window.speak) speak("Sensors online. Initializing neural facial analysis. Please remain still.");
+
+                // Step 2: Show Scan Visuals
+                laser.style.display = 'block';
+                spawnMesh();
+
+                // Step 3: Run Scanning Phases
+                const phases = [
+                    "EXTRACTING_GEOMETRY...",
+                    "ANALYZING_LIVENESS...",
+                    "TEXTURE_MAPPING...",
+                    "COMPUTING_SIGNATURE...",
+                    "SECURING_HANDSHAKE...",
+                    "ACCESS_GRANTED"
+                ];
+                
+                let i = 0;
+                const sequence = setInterval(() => {
+                    terminal.innerText = phases[i];
+                    updateLog(`PHASE_${i+1}_COMPLETE`);
+                    i++;
+                    if (i >= phases.length) {
+                        clearInterval(sequence);
+                        if (window.speak) speak("Identity verified. Permission granted.");
+                        setTimeout(() => {
+                            window.location.href = "/public/home/faceverification";
+                        }, 500);
+                    }
+                }, 1000);
+
+            } catch (err) {
+                console.error(err);
+                swal("ACCESS_DENIED", "Biometric hardware access is required for authentication.", "error");
+                btnStart.disabled = false;
+                btnStart.innerHTML = "<i class='fa fa-bullseye'></i> RETRY AUTHENTICATION";
+            }
+        }
+
+        function spawnMesh() {
+            for(let i=0; i<25; i++) {
+                const dot = document.createElement('div');
+                dot.className = 'mesh-dot';
+                dot.style.left = (45 + Math.random() * 10) + 'vw';
+                dot.style.top = (40 + Math.random() * 20) + 'vh';
+                dot.style.display = 'block';
+                meshField.appendChild(dot);
+                
+                setInterval(() => {
+                    dot.style.transform = `translate(${(Math.random()-0.5)*10}px, ${(Math.random()-0.5)*10}px)`;
+                }, 50);
+            }
+        }
+
+        btnStart.addEventListener('click', startFullAuthentication);
+
+        window.onload = function() {
+            if (window.speak) speak("Identity Analyzer active. Click the button to start your secure biometric authentication.");
+        };
+    </script>
+</body>
+</html>
