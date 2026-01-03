@@ -55,27 +55,6 @@ The specific objectives of the project include:
 
 ## Screenshots
 
-#### Home Page
-![](https://raw.githubusercontent.com/Themysticlees/Secure-Online-Voting-System-using-Face-Recognition-and-BlockChain/master/Screenshots/Image%201.png)
-
-#### Registration Page
-![](https://raw.githubusercontent.com/Themysticlees/Secure-Online-Voting-System-using-Face-Recognition-and-BlockChain/master/Screenshots/Image%202.png)
-
-#### Instructions (In Video and Written)
-![](https://raw.githubusercontent.com/Themysticlees/Secure-Online-Voting-System-using-Face-Recognition-and-BlockChain/master/Screenshots/Image%203.jpg)
-
-#### Admin Portal
-![](https://raw.githubusercontent.com/Themysticlees/Secure-Online-Voting-System-using-Face-Recognition-and-BlockChain/master/Screenshots/Image%204.png)
-
-#### Details of the Registered Users
-![](https://raw.githubusercontent.com/Themysticlees/Secure-Online-Voting-System-using-Face-Recognition-and-BlockChain/master/Screenshots/Image%205.png)
-
-#### User Portal when Voting goes LIVE!
-![](https://raw.githubusercontent.com/Themysticlees/Secure-Online-Voting-System-using-Face-Recognition-and-BlockChain/master/Screenshots/Image%206.png)
-
-#### Confirmation Email after successfuly Voting
-![](https://raw.githubusercontent.com/Themysticlees/Secure-Online-Voting-System-using-Face-Recognition-and-BlockChain/master/Screenshots/Image%207.png)
-
 ## Documentation
 
 (Will be uploaded Later)
