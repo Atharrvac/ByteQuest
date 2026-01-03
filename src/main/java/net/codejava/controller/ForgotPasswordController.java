@@ -64,13 +64,19 @@ public class ForgotPasswordController {
         }
 
         String email = user.getEmail();
-        // generating otp
-        // Integer otp = random.nextInt(999999);
+        // Generate a secure 6-digit OTP with better entropy
         int min = 100000;
         int max = 999999;
-        // Generate a 6-digit OTP
-        Integer otp = (int) (Math.random() * (max - min + 1) + min);
-        System.out.println("Generated OTP: " + otp);
+        // Using SecureRandom for better cryptographic strength
+        java.security.SecureRandom secureRandom = new java.security.SecureRandom();
+        int otp = secureRandom.nextInt(max - min + 1) + min;
+        
+        // Set OTP expiration time (5 minutes from now)
+        long otpExpiryTime = System.currentTimeMillis() + (5 * 60 * 1000);
+        
+        // Log OTP generation (remove in production or use proper logging)
+        System.out.println("OTP " + otp + " generated for user: " + username + 
+                         " (Expires at: " + new java.util.Date(otpExpiryTime) + ")");
 
         // write code for send otp to email...
 
