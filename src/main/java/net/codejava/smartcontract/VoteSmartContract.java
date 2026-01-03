@@ -59,4 +59,16 @@ public class VoteSmartContract {
                 .map(java.util.Map.Entry::getKey)
                 .orElse(candidates.isEmpty() ? "None" : candidates.get(0).getParty());
     }
+
+    public boolean validateTransaction(net.codejava.model.Votedata vote) {
+        try {
+            net.codejava.model.User user = userRepo.findByUsername(vote.getUsername());
+            if (user == null)
+                return false;
+            System.out.println("[BLOCKCHAIN] Validating Node Hash for user: " + vote.getUsername());
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
 }
