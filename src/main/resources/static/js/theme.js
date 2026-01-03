@@ -347,12 +347,14 @@
             slidesPerView: 4,
             spaceBetween: 30,
             speed: 1400,
-            watchSlidesVisibility: true,
             watchSlidesProgress: true,
-            loop: true,
+            loop: false,
+            observer: true,
+            observeParents: true,
             autoplay: {
               delay: 5000,
-            },
+              disableOnInteraction: false
+            }
           }
         );
       } catch (e) {
@@ -367,8 +369,10 @@
           observeParents: true,
           speed: 1400,
           mousewheel: false,
+          watchSlidesProgress: true,
           autoplay: {
             delay: 5000,
+            disableOnInteraction: false
           }
         };
         if (testimonialsTwoThumbCarousel) {
